@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: backend
+    env_file:
+      - ./backend/.env.dev
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    command: npm run start:dev
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    env_file:
+      - ./frontend/.env.dev
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    command: npm run dev
+
+volumes:
+  postgres_data:
