@@ -67,10 +67,6 @@ export const TreeList = () => {
     return <p>Error: {errorMessage}</p>;
   }
 
-  if (!trees.length) {
-    return;
-  }
-
   return (
     <>
       <Form onSubmit={handleSubmit}>
